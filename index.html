@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>История — Командная викторина</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header__inner">
+        <div class="brand">
+          <div class="brand__title">История</div>
+          <div class="brand__subtitle">Командная викторина</div>
+        </div>
+
+        <div class="scoreboard" aria-label="Табло команд">
+          <div class="score score--red">
+            <div class="score__label">Красные</div>
+            <div class="score__value" id="scoreRed">0</div>
+          </div>
+          <div class="score score--blue">
+            <div class="score__label">Синие</div>
+            <div class="score__value" id="scoreBlue">0</div>
+          </div>
+          <button class="btn btn--ghost" id="resetBtn" type="button">
+            Сбросить
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container main">
+      <section class="panel">
+        <div class="panel__head">
+          <h2 class="panel__title">Правила</h2>
+          <div class="panel__hint">Прокручивайте карточки вправо</div>
+        </div>
+        <div class="rules" id="rules">
+          <article class="rule">
+            <div class="rule__title">1) Очерёдность</div>
+            <div class="rule__text">
+              Выберите, чья очередь отвечать (Красные/Синие).
+            </div>
+          </article>
+          <article class="rule">
+            <div class="rule__title">2) Ответ</div>
+            <div class="rule__text">
+              На каждый вопрос — 4 варианта. Выберите один.
+            </div>
+          </article>
+          <article class="rule">
+            <div class="rule__title">3) Начисление очков</div>
+            <div class="rule__text">
+              Если ответ верный — +1 очко команде, чья очередь была активна.
+            </div>
+          </article>
+          <article class="rule">
+            <div class="rule__title">4) Порядок вопросов</div>
+            <div class="rule__text">
+              Вопросы идут по порядку внутри выбранной темы.
+            </div>
+          </article>
+          <article class="rule">
+            <div class="rule__title">5) Сохранение</div>
+            <div class="rule__text">
+              Очки, тема, текущий вопрос и очередь сохраняются при обновлении
+              страницы.
+            </div>
+          </article>
+          <article class="rule">
+            <div class="rule__title">6) Сброс</div>
+            <div class="rule__text">
+              Кнопка «Сбросить» обнуляет очки и возвращает к первому вопросу темы.
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel quiz">
+        <div class="quizPicker" aria-label="Выбор викторины">
+          <div class="quizPicker__label">Викторина:</div>
+          <div class="quizPicker__controls" id="quizTabs">
+            <button class="chip" type="button" data-quiz="q1907_1945">
+              1907–1945 г
+            </button>
+          </div>
+        </div>
+        <div class="settingsRow" aria-label="Настройки викторины">
+          <div class="settingsRow__label">Настройки:</div>
+          <div class="settingsRow__controls">
+            <div class="selectLike" id="difficultySelect" role="group" aria-label="Уровень сложности">
+              <button class="selectLike__btn" type="button" data-diff="1">Базовый</button>
+              <button class="selectLike__btn" type="button" data-diff="2">Средний</button>
+              <button class="selectLike__btn" type="button" data-diff="3">Сложный</button>
+            </div>
+            <div class="selectLike" id="countSelect" role="group" aria-label="Количество вопросов">
+              <button class="selectLike__btn" type="button" data-count="15">15</button>
+              <button class="selectLike__btn" type="button" data-count="30">30</button>
+            </div>
+            <div class="settingsRow__hint" id="settingsHint">
+              Доступно до первого ответа
+            </div>
+          </div>
+        </div>
+        <div class="quiz__top">
+          <div class="turn" aria-label="Чья очередь отвечать">
+            <div class="turn__label">Очередь:</div>
+            <div class="segmented" role="tablist" aria-label="Выбор команды">
+              <button
+                class="segmented__btn"
+                id="teamRedBtn"
+                type="button"
+                aria-pressed="true"
+              >
+                Красные
+              </button>
+              <button
+                class="segmented__btn"
+                id="teamBlueBtn"
+                type="button"
+                aria-pressed="false"
+              >
+                Синие
+              </button>
+            </div>
+
+            <label class="toggle" for="autoTurn">
+              <input id="autoTurn" type="checkbox" />
+              <span class="toggle__box" aria-hidden="true"></span>
+              <span class="toggle__text">Автовыбор</span>
+            </label>
+          </div>
+
+          <div class="progressWrap" aria-label="Прогресс решённых заданий">
+            <div class="progressHead">
+              <div class="progressText">
+                Решено: <span id="solvedText">0/15</span>
+              </div>
+              <div class="topicName" id="topicName">—</div>
+            </div>
+            <div
+              class="progressBar"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="15"
+            >
+              <div class="progressBar__fill" id="progressFill"></div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="topicSelect">
+          <div class="topicSelect__label">Тема:</div>
+          <div class="topicSelect__controls" id="topicTabs">
+            <button class="chip" type="button" data-topic="vov">
+              Великая Отечественная война
+            </button>
+            <button class="chip" type="button" data-topic="ww1">
+              Первая мировая война
+            </button>
+            <button class="chip" type="button" data-topic="civil">
+              Гражданская война (Россия)
+            </button>
+          </div>
+        </div>
+
+        <div class="questionCard" id="questionCard" aria-live="polite">
+          <div class="questionMeta">
+            <div class="questionNum" id="questionNum">Вопрос 1</div>
+          </div>
+          <div class="questionText" id="questionText">—</div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback" hidden></div>
+          <div class="actions">
+            <button class="btn" id="nextBtn" type="button" disabled>
+              Следующий вопрос
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__text">
+          Подсказка: можно менять тему в любой момент — прогресс по каждой теме
+          хранится отдельно.
+        </div>
+      </div>
+    </footer>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
